@@ -10,18 +10,40 @@ const scoreDiv = document.querySelector('.score');
 const gameOverDiv = document.querySelector('.game-over')
 const resetGameDiv = document.querySelector('.reset-game')
 const containerDiv = document.querySelector('.container')
+const startBtn = document.querySelector('#start-button')
+const allBtns = document.querySelectorAll('button')
+// const imgDiv = document.querySelector('#img-div')
+let image = document.createElement('img')
+rockBtn.setAttribute('hidden', 1)
+paperBtn.setAttribute('hidden', 1)
+scissorsBtn.setAttribute('hidden', 1)
+
+
+
+
+startBtn.addEventListener('click', () => {
+    rockBtn.removeAttribute('hidden', 1)
+    paperBtn.removeAttribute('hidden', 1)
+    scissorsBtn.removeAttribute('hidden', 1)
+    startBtn.setAttribute('hidden', 1)
+})
 
 rockBtn.addEventListener('click', () => {
     const playerSelection = 'rock';
     const computerSelection = getComputerChoice();
-    playRound(playerSelection, computerSelection);
+    playRound(playerSelection, computerSelection)
 })
+
+rockBtn.addEventListener('click', createRock)
 
 paperBtn.addEventListener('click', () => {
     const playerSelection = 'paper';
     const computerSelection = getComputerChoice();
     playRound(playerSelection, computerSelection);
+
 })
+
+paperBtn.addEventListener('click', createPaper)
 
 scissorsBtn.addEventListener('click', () => {
     const playerSelection = 'scissors';
@@ -29,11 +51,37 @@ scissorsBtn.addEventListener('click', () => {
     playRound(playerSelection, computerSelection);
 })
 
+
+scissorsBtn.addEventListener('click', createScissors)
+
 function getComputerChoice() {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
+
+function createRock() {
+    image.src = 'images/rock.png'
+    image.classList.add('selection-img')
+    containerDiv.appendChild(image)
+}
+
+function createPaper() {
+    image.src = 'images/paper.png'
+    image.classList.add('selection-img')
+    containerDiv.appendChild(image)
+    // paperBtn.removeEventListener('click', createPaper)
+}
+
+function createScissors() {
+    image.src = 'images/scissors.png'
+    image.classList.add('selection-img')
+    containerDiv.appendChild(image)
+    // scissorsBtn.removeEventListener('click', createScissors)
+}
+
+
 function playRound(playerSelection, computerSelection) {
+    image.removeAttribute('hidden', 1)
     const p = document.createElement('p')
     scoreDiv.innerText = `Player Score: ${playerScore} || Computer Score: ${computerScore}`
     resultDiv.innerText = ''
@@ -48,6 +96,7 @@ function playRound(playerSelection, computerSelection) {
         computerScore++
         p.innerText = `You lose! ${computerSelection} beats ${playerSelection}.`;
         resultDiv.appendChild(p)
+
     }
     checkForWinner(playerScore, computerScore);
 }
@@ -58,7 +107,7 @@ function checkForWinner(playerScore, computerScore) {
         h2.classList.add('player-won');
         h2.innerText = `You beat the computer ${playerScore} to ${computerScore}`;
         gameOverDiv.appendChild(h2);
-        endGame()
+        endGame();
     } else if (computerScore === 5) {
         const h2 = document.createElement('h2');
         h2.classList.add('computer-won');
@@ -69,22 +118,25 @@ function checkForWinner(playerScore, computerScore) {
 }
 
 function endGame() {
-    rockBtn.setAttribute('disabled', 1)
-    paperBtn.setAttribute('disabled', 1)
-    scissorsBtn.setAttribute('disabled', 1)
+    image.setAttribute('hidden', 1)
+    rockBtn.setAttribute('hidden', 1)
+    paperBtn.setAttribute('hidden', 1)
+    scissorsBtn.setAttribute('hidden', 1)
     const resetBtn = document.createElement('button');
+    resetBtn.classList.add('new-game-btn')
     resetBtn.innerText = 'New Game';
     resetGameDiv.appendChild(resetBtn);
     scoreDiv.innerText = ''
+    resultDiv.innerText = ''
     resetBtn.addEventListener('click', function resetGame() {
         playerScore = 0;
         computerScore = 0;
-        scoreDiv.innerText = ''
-        resultDiv.innerText = ''
         gameOverDiv.innerText = ''
+        resultDiv.innerText = 'Good Luck'
         resetGameDiv.removeChild(resetBtn);
-        rockBtn.removeAttribute('disabled')
-        paperBtn.removeAttribute('disabled')
-        scissorsBtn.removeAttribute('disabled')
+        rockBtn.removeAttribute('hidden', 1)
+        paperBtn.removeAttribute('hidden', 1)
+        scissorsBtn.removeAttribute('hidden', 1)
+
     })
 }
