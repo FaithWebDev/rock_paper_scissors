@@ -9,11 +9,14 @@ const resultDiv = document.querySelector('.results');
 const scoreDiv = document.querySelector('.score');
 const gameOverDiv = document.querySelector('.game-over')
 const resetGameDiv = document.querySelector('.reset-game')
-const containerDiv = document.querySelector('.container')
+const wrapperDiv = document.querySelector('.wrapper')
 const startBtn = document.querySelector('#start-button')
 const allBtns = document.querySelectorAll('button')
-// const imgDiv = document.querySelector('#img-div')
 let image = document.createElement('img')
+
+
+resultDiv.setAttribute('style', 'display:none')
+scoreDiv.setAttribute('hidden', 1)
 rockBtn.setAttribute('hidden', 1)
 paperBtn.setAttribute('hidden', 1)
 scissorsBtn.setAttribute('hidden', 1)
@@ -26,7 +29,13 @@ startBtn.addEventListener('click', () => {
     paperBtn.removeAttribute('hidden', 1)
     scissorsBtn.removeAttribute('hidden', 1)
     startBtn.setAttribute('hidden', 1)
+    resultDiv.removeAttribute('style', 'display:none')
+    scoreDiv.removeAttribute('hidden', 1)
+    scoreDiv.removeAttribute('hidden', 1)
+    resultDiv.innerText = 'Rock, Paper, or Scissors?'
+    scoreDiv.innerHTML = `Player Score: ${playerScore} || Computer Score: ${computerScore}`
 })
+
 
 rockBtn.addEventListener('click', () => {
     const playerSelection = 'rock';
@@ -34,13 +43,14 @@ rockBtn.addEventListener('click', () => {
     playRound(playerSelection, computerSelection)
 })
 
+
+
 rockBtn.addEventListener('click', createRock)
 
 paperBtn.addEventListener('click', () => {
     const playerSelection = 'paper';
     const computerSelection = getComputerChoice();
     playRound(playerSelection, computerSelection);
-
 })
 
 paperBtn.addEventListener('click', createPaper)
@@ -58,29 +68,27 @@ function getComputerChoice() {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-
 function createRock() {
     image.src = 'images/rock.png'
     image.classList.add('selection-img')
-    containerDiv.appendChild(image)
+    resultDiv.appendChild(image)
 }
 
 function createPaper() {
     image.src = 'images/paper.png'
     image.classList.add('selection-img')
-    containerDiv.appendChild(image)
-    // paperBtn.removeEventListener('click', createPaper)
+    resultDiv.appendChild(image)
 }
 
 function createScissors() {
     image.src = 'images/scissors.png'
     image.classList.add('selection-img')
-    containerDiv.appendChild(image)
-    // scissorsBtn.removeEventListener('click', createScissors)
+    resultDiv.appendChild(image)
 }
 
 
 function playRound(playerSelection, computerSelection) {
+    resultDiv.removeAttribute('style', 'display:none')
     image.removeAttribute('hidden', 1)
     const p = document.createElement('p')
     scoreDiv.innerText = `Player Score: ${playerScore} || Computer Score: ${computerScore}`
@@ -92,51 +100,61 @@ function playRound(playerSelection, computerSelection) {
         playerScore++
         p.innerText = `You win! ${playerSelection} beats ${computerSelection}.`;
         resultDiv.appendChild(p);
+        p.classList.add('player-won-round')
     } else {
         computerScore++
+        p.classList.add('computer-won-round')
         p.innerText = `You lose! ${computerSelection} beats ${playerSelection}.`;
         resultDiv.appendChild(p)
+        p.classList.add('computer-won-round')
 
     }
     checkForWinner(playerScore, computerScore);
 }
 
+
+
 function checkForWinner(playerScore, computerScore) {
     if (playerScore === 5) {
         const h2 = document.createElement('h2');
         h2.classList.add('player-won');
-        h2.innerText = `You beat the computer ${playerScore} to ${computerScore}`;
+        h2.innerText = `You beat the computer ${playerScore} to ${computerScore} :)`;
         gameOverDiv.appendChild(h2);
         endGame();
     } else if (computerScore === 5) {
         const h2 = document.createElement('h2');
         h2.classList.add('computer-won');
-        h2.innerText = `The computer beat you ${computerScore} to ${playerScore}`;
+        h2.innerText = `The computer beat you ${computerScore} to ${playerScore} :(`;
         gameOverDiv.appendChild(h2);
         endGame();
     }
 }
 
 function endGame() {
+    resultDiv.setAttribute('style', 'display:none')
+    scoreDiv.setAttribute('hidden', 1)
     image.setAttribute('hidden', 1)
     rockBtn.setAttribute('hidden', 1)
     paperBtn.setAttribute('hidden', 1)
     scissorsBtn.setAttribute('hidden', 1)
     const resetBtn = document.createElement('button');
     resetBtn.classList.add('new-game-btn')
+    resetBtn.classList.add('btn')
     resetBtn.innerText = 'New Game';
     resetGameDiv.appendChild(resetBtn);
     scoreDiv.innerText = ''
     resultDiv.innerText = ''
     resetBtn.addEventListener('click', function resetGame() {
+        resultDiv.removeAttribute('style', 'display:none')
         playerScore = 0;
         computerScore = 0;
         gameOverDiv.innerText = ''
-        resultDiv.innerText = 'Good Luck'
+        resultDiv.innerText = 'Good Luck, Have Fun!'
         resetGameDiv.removeChild(resetBtn);
         rockBtn.removeAttribute('hidden', 1)
         paperBtn.removeAttribute('hidden', 1)
         scissorsBtn.removeAttribute('hidden', 1)
+        scoreDiv.removeAttribute('hidden', 1)
 
     })
 }
